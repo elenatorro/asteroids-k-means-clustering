@@ -5,7 +5,7 @@ by [Elena Torró](https://elenatorro.com)
 ## Introduction
 
 This is a project developed for the ["To Infinity and beyond"](https://www.tinybird.co/events/tinybird-hackathon) Tinybird's first hackathon.
-It's a proof of concept to explain how to use Tinybird for unsupervised data classification purposes, by using Asteroids information since one of the requisites of the hackathon is it has to be space-themed.
+It's a proof of concept to explain how to use Tinybird for unsupervised data classification purposes, by using Asteroids information since one of the requisites of the hackathon is it has to be **space-themed**.
 
 ### What's K-Means clustering?
 
@@ -14,13 +14,13 @@ It's a proof of concept to explain how to use Tinybird for unsupervised data cla
 
 ## Get the source data
 
-We'll be getting asteroids data from the Near Earth Object Web Service (NeoWS) by using the [NASA public API](https://api.nasa.gov/). You need to register to get your own API KEY.
+We'll be getting asteroids data from the Near Earth Object Web Service (NeoWS) by using the [NASA public API](https://api.nasa.gov/). You need to register to get your own **API KEY**.
 
 > Asteroids - NeoWs (Near Earth Object Web Service) is a RESTful web service for near earth Asteroid information. With NeoWs a user can: search for Asteroids based on their closest approach date to Earth, lookup a specific Asteroid with its NASA JPL small body id, as well as browse the overall data-set. All the data is from the NASA JPL Asteroid team (http://neo.jpl.nasa.gov/)
 
 ## Create a Tinybird account
 
-Go to [Tinybird](https://www.tinybird.co/) and create a free account if don't have one already.
+Go to [Tinybird](https://www.tinybird.co/) and create a free account if don't have one already. You can create a new workspace or use an existing one.
 
 ## Project setup
 
@@ -33,6 +33,7 @@ This is the Tinybird's project. It contains the Pipes and Data Sources needed to
 > Note: the data used in this demo is already stored in `workspace/asteroids.ndjson`, so you don't need to run the python scripts to generate the data if you don't want to.
 
 It contains a script in Python to feed the asteroids Data Source in Tinybird from the NASA's API. You'll need to set the NASA API KEY and the Tinybird's token in the script to push the data into your workspace. Take a look at `.env_tmp` to see the variables you need to get data.
+
 
 ## Initialize project
 
@@ -114,7 +115,7 @@ For our analysis we're only need to pick two quantitative variables. We've chose
 
 ## Initialize origin data source
 
-1. Append `asteroids.ndjson` file:
+1. Append `asteroids.ndjson` file to the `asteroids` Data Source:
 
 ```bash
 tb datasource append asteroids asteroids.ndjson
