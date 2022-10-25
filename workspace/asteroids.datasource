@@ -1,0 +1,11 @@
+SCHEMA >
+    `absolute_magnitude_h` Float32 `json:$.absolute_magnitude_h`,
+    `date` DateTime `json:$.date`,
+    `id` String `json:$.id`,
+    `kilometers_per_second` Float32 `json:$.kilometers_per_second`,
+    `nasa_jpl_url` String `json:$.nasa_jpl_url`,
+    `orbiting_body` String `json:$.orbiting_body`
+
+ENGINE "MergeTree"
+ENGINE_PARTITION_KEY "toYear(date)"
+ENGINE_SORTING_KEY "date, id, nasa_jpl_url, orbiting_body"

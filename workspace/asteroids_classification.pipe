@@ -1,0 +1,52 @@
+NODE nearest_centroid
+SQL >
+
+    WITH (SELECT  groupArray(j), groupArray(C), any(step) FROM asteroids_centroids  WHERE step = ( SELECT max(step) FROM asteroids_centroids) ) AS jC
+    SELECT  id, Y.1 as y1, Y.2 as y2, jC.3+1 as step,
+            arraySort((j, C) -> sqrt(plus(pow(minus(C.1, Y.1), 2), pow(minus(C.2, Y.2), 2))), jC.1, jC.2)[1] AS j
+    FROM asteroids_data
+
+
+NODE final_points
+SQL >
+
+    SELECT
+      id,
+      y1 as x,
+      if(j=1,y2,null) as p1,
+      if(j=2,y2,null) as p2,
+      if(j=3,y2,null) as p3,
+      if(j=4,y2,null) as p4,
+      if(j=5,y2,null) as p5
+    FROM nearest_centroid
+
+
+NODE points
+SQL >
+
+    SELECT
+        id,
+        x as value,
+        tpl.1 AS cluster,
+        tpl.2 AS point
+    FROM final_points
+    ARRAY JOIN tupleToNameValuePairs((p1, p2, p3, p4, p5)) AS tpl
+    WHERE isNotNull(point)
+    ORDER BY cluster ASC
+
+
+NODE endpoint
+SQL >
+
+    SELECT 
+       earthquake_id,
+       depth,
+       mag,
+       value,
+       cluster,
+       point,
+       type
+    FROM points as a
+    LEFT JOIN 
+    (SELECT cityHash64(id) as e_id, id as earthquake_id, depth, mag, type FROM earthquakes) as b
+    ON b.e_id = a.id 

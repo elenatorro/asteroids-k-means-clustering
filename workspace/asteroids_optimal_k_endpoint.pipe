@@ -1,0 +1,5 @@
+NODE endpoint
+
+SQL >
+
+    SELECT step, value FROM asteroids_optimal_k_data

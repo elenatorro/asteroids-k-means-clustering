@@ -1,0 +1,10 @@
+NODE optimal_k_calculate
+SQL >
+  WITH (
+    SELECT groupArray(j), groupArray(C), any(step) FROM asteroids_centroids WHERE step = (SELECT max(step) FROM asteroids_centroids)) AS jC,
+    arraySort(x->x.2,arrayMap(j,C->(j,sqrt(plus(pow(minus(C.1, Y.1), 2), pow(minus(C.2, Y.2), 2)))), jC.1, jC.2))[1] as pd
+  SELECT toUInt32(max(pd.1)) as step, sum(pd.2) as value
+  FROM asteroids_data
+
+TYPE materialized
+DATASOURCE asteroids_optimal_k_data

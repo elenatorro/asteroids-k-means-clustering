@@ -1,0 +1,7 @@
+SCHEMA >
+    `step` UInt32,
+    `j` Int32,
+    `C` Tuple(Float64,Float64)
+
+ENGINE "MergeTree"
+ENGINE_SORTING_KEY "step"

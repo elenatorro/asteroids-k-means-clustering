@@ -1,0 +1,7 @@
+NODE init
+SQL >
+  select cityHash64(id) as id, (toFloat32(absolute_magnitude_h), toFloat32(kilometers_per_second)) as Y
+  from asteroids
+
+TYPE materialized
+DATASOURCE asteroids_data

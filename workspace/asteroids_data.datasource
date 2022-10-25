@@ -1,0 +1,6 @@
+SCHEMA >
+    `id` UInt64,
+    `Y` Tuple(Float64,Float64)
+
+ENGINE "MergeTree"
+ENGINE_SORTING_KEY "id"

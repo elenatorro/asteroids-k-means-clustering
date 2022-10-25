@@ -1,0 +1,12 @@
+NODE first
+
+SQL >
+  SELECT
+    0 as step,
+    toInt32(rowNumberInAllBlocks() + 1) as j,
+    Y as C
+  FROM asteroids_data
+  limit 40, 1
+
+TYPE materialized
+DATASOURCE asteroids_centroids

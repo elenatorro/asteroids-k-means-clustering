@@ -1,0 +1,6 @@
+SCHEMA >
+    `step` UInt32,
+    `value` Float64
+
+ENGINE "MergeTree"
+ENGINE_SORTING_KEY "step"
