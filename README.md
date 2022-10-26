@@ -39,20 +39,28 @@ It contains a script in Python to feed the asteroids Data Source in Tinybird fro
 
 1. Create a virtual environment
 
-```bash
+```sh
 virtualenv -p python3.8 .e
 ```
 
 2. Authenticate using the Tinybird's CLI
 
-```bash
-$ tb auth --token $TOKEN
+```sh
+pip install tinybird-cli
+```
+
+```sh
+cd workspace
+```
+
+```sh
+tb auth --token $TOKEN
 ```
 
 3. Push project to workspace
 
-```bash
-$ tb push
+```sh
+tb push
 ```
 
 Your workspace should have the following Data Flow:
@@ -115,17 +123,31 @@ For our analysis we're only need to pick two quantitative variables. We've chose
 
 ## Initialize origin data source
 
+
 1. Append `asteroids.ndjson` file to the `asteroids` Data Source:
 
-```bash
+The data used in this demo is already saved in `workspace/asteroids.ndjson`, but you can generate it by using the script `script/get_asteroids_data.py` (remember you need an `API_KEY` for http://neo.jpl.nasa.gov/)
+
+```sh
+ASTEROIDS_API_KEY = 'YOUR_API_KEY'
+ASTEROIDS_URL = 'https://api.nasa.gov/neo/rest/v1/feed'
+```
+
+```sh
+python3.8 scripts/get_asteroids_data.py
+mv asteroids.ndjson workspace/asteroids.ndjson
+cd workspace
+```
+
+```sh
 tb datasource append asteroids asteroids.ndjson
 ```
 
-Filter data to `asteroids_data` Data Source to use only the data we need through the `asteroids_data_initialization` pipeç
+Filter data to `asteroids_data` Data Source to use only the data we need through the `asteroids_data_initialization` pipe:
 
-> Note: `--force` flag is to force override the pipe since it already exists
+> Note: `--force` flag is to force overrididing the pipe since it already exists
 
-```bash
+```sh
 tb push asteroids_data_initialization.pipe --populate --force
 ```
 
@@ -148,13 +170,13 @@ The steps are calculated with `asteroids_optimal_k`, and resulting values will b
 
 1. Populate first centroid:
 
-```bash
+```sh
 tb push asteroids_centroids_1_first.pipe --populate --force
 ```
 
 2. Calculate first step:
 
-```bash
+```sh
 tb push asteroids_optimal_k.pipe --populate  --force
 ```
 
@@ -162,13 +184,13 @@ tb push asteroids_optimal_k.pipe --populate  --force
 
 1. Calculate next centroid
 
-```bash
+```sh
 tb push asteroids_centroids_2_next.pipe --populate --force
 ```
 
 2. Recalculate next step:
 
-```bash
+```sh
 tb push asteroids_optimal_k.pipe --populate  --force
 ```
 
@@ -176,19 +198,19 @@ tb push asteroids_optimal_k.pipe --populate  --force
 
 You have to do this as many times you consider enough until you can visualize optimal K value:
 
-```bash
+```sh
 repeat 15 { tb push asteroids_centroids_2_next.pipe --populate --force; tb push asteroids_optimal_k.pipe --populate --force }
 ```
 
 4. Publish classification endpoint
 
-To see how the graph evolves, you can use `asteroids_optimal_k_endpoint` to visualize the graph in Vega:
+To see how the graph evolves, you can use `asteroids_optimal_k_endpoint` to visualize the graph in [Vega](https://vega.github.io/editor/#/):
 
-```bash
+```sh
 tb push asteroids_optimal_k_endpoint.pipe
 ```
 
-> replace `YOUR_DATA_URL` with your API endpoint
+Replace `YOUR_DATA_URL` with your API endpoint and paste the following code in [Vega](https://vega.github.io/editor/#/). It should be something like: https://api.tinybird.co/v0/pipes/asteroids_optimal_k_endpoint.csv?token=YOUR_READ_TOKEN
 
 ```json
 {
@@ -232,31 +254,31 @@ Now that we know the value for K, let's start again:
 
 1. Truncate centroids Data Source:
 
-```bash
+```sh
  tb datasource truncate asteroids_centroids --yes
 ```
 
 1. Populate first centroid
 
-```bash
+```sh
 tb push asteroids_centroids_1_first.pipe --populate --force
 ```
 
 2. Populate next centroids as many times as clusters you need (K - 1 times, since we've already calculated the first centroid)
 
-```bash
+```sh
 repeat 3 { tb push asteroids_centroids_2_next.pipe --populate --force }
 ```
 
 3. Now, populate recalculate centroids as many times as clusters you need (K times)
 
-```bash
+```sh
 repeat 4 { tb push asteroids_centroids_3_recalculate.pipe --populate --force }
 ```
 
 4. Publish classification endpoint
 
-```bash
+```sh
 tb push asteroids_classification.pipe
 ```
 
@@ -264,7 +286,7 @@ tb push asteroids_classification.pipe
 
 ![Asteroids classification graph in Vega](images/asteroids_classification.png)
 
-> replace `YOUR_DATA_URL` with your API endpoint
+Replace `YOUR_DATA_URL` with your API endpoint and paste the following code in [Vega](https://vega.github.io/editor/#/). It should be something like: https://api.tinybird.co/v0/pipes/asteroids_classification.csv?token=YOUR_READ_TOKEN
 
 ```json
 {
