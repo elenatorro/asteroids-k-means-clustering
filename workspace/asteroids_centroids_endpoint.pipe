@@ -1,0 +1,9 @@
+NODE endpoint
+SQL >
+
+    WITH (SELECT max(step) as max_step FROM asteroids_centroids) as max_step
+    SELECT 
+      C.1 as y,
+      C.2 as x
+    FROM asteroids_centroids
+    WHERE step = max_step

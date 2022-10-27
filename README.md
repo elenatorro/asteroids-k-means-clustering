@@ -210,7 +210,7 @@ To see how the graph evolves, you can use `asteroids_optimal_k_endpoint` to visu
 tb push asteroids_optimal_k_endpoint.pipe
 ```
 
-Replace `YOUR_DATA_URL` with your API endpoint and paste the following code in [Vega](https://vega.github.io/editor/#/). It should be something like: https://api.tinybird.co/v0/pipes/asteroids_optimal_k_endpoint.csv?token=YOUR_READ_TOKEN
+Replace `YOUR_API_URL` with your API endpoint and paste the following code in [Vega](https://vega.github.io/editor/#/). It should be something like: https://api.tinybird.co/v0/pipes/asteroids_optimal_k_endpoint.csv?token=YOUR_READ_TOKEN
 
 ```json
 {
@@ -218,7 +218,7 @@ Replace `YOUR_DATA_URL` with your API endpoint and paste the following code in [
     "width": 600,
     "height": 400,
     "data": {
-        "url": "YOUR_DATA_URL",
+        "url": "YOUR_API_URL",
         "format": {
             "type": "csv"
         }
@@ -276,6 +276,42 @@ repeat 3 { tb push asteroids_centroids_2_next.pipe --populate --force }
 repeat 4 { tb push asteroids_centroids_3_recalculate.pipe --populate --force }
 ```
 
+Extra: check how centroids evolve using the `asteroids_centroids_endpoint` endpoint:
+
+```json
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v3.json",
+  "width": 600,
+  "height": 400,
+  "layer": [{
+    "data": {
+      "url": "asteroids_centroids_endpoint",
+      "format": {
+        "type": "csv"
+      }
+    },
+    "mark": {
+      "type": "point",
+      "color": "black",
+      "filled": true
+    },
+    "encoding": {
+      "x": {
+        "field": "x",
+        "type": "quantitative"
+      },
+      "y": {
+        "field": "y",
+        "type": "quantitative"
+      },
+      "size": {
+        "value": 100
+      }
+    }
+  }]
+}
+```
+
 4. Publish classification endpoint
 
 ```sh
@@ -286,7 +322,7 @@ tb push asteroids_classification.pipe
 
 ![Asteroids classification graph in Vega](images/asteroids_classification.png)
 
-Replace `YOUR_DATA_URL` with your API endpoint and paste the following code in [Vega](https://vega.github.io/editor/#/). It should be something like: https://api.tinybird.co/v0/pipes/asteroids_classification.csv?token=YOUR_READ_TOKEN
+Replace `YOUR_API_URL` with your API endpoint and paste the following code in [Vega](https://vega.github.io/editor/#/). It should be something like: https://api.tinybird.co/v0/pipes/asteroids_classification.csv?token=YOUR_READ_TOKEN
 
 ```json
 {
@@ -294,7 +330,7 @@ Replace `YOUR_DATA_URL` with your API endpoint and paste the following code in [
     "width": 600,
     "height": 400,
     "data": {
-        "url": "YOUR_DATA_URL",
+        "url": "YOUR_API_URL",
         "format": {
             "type": "csv"
         }
@@ -320,6 +356,81 @@ Replace `YOUR_DATA_URL` with your API endpoint and paste the following code in [
             "type": "quantitative"
         }]
     }
+}
+```
+
+Extra: show centroids also
+
+```json
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v3.json",
+  "width": 600,
+  "height": 400,
+  "layer": [{
+    "data": {
+      "url": "asteroids_centroids_endpoint",
+      "format": {
+        "type": "csv"
+      }
+    },
+    "mark": {
+      "type": "point",
+      "interpolate": "monotone",
+      "filled": true
+    },
+    "encoding": {
+      "x": {
+        "field": "point",
+        "type": "quantitative"
+      },
+      "y": {
+        "field": "value",
+        "type": "quantitative"
+      },
+      "color": {
+        "field": "cluster",
+        "type": "nominal"
+      },
+      "size": {
+        "value": 100
+      },
+      "tooltip": [{
+        "field": "asteroid_id",
+        "type": "nominal"
+      }, {
+        "field": "kilometers_per_second",
+        "type": "quantitative"
+      }, {
+        "field": "absolute_magnitude_h",
+        "type": "quantitative"
+      }]
+    }
+  }, {
+    "data": {
+      "url": "YOUR_API_URL",
+      "format": {
+        "type": "csv"
+      }
+    },
+    "mark": {
+      "type": "point",
+      "color": "black",
+      "filled": true
+    },
+    "encoding": {
+      "x": {
+        "field": "x",
+        "type": "quantitative"
+      },
+      "y": {
+        "field": "y",
+        "type": "quantitative"
+      },
+      "size": {
+        "value": 100
+      }
+    }
+  }]
 }
 ```
 
