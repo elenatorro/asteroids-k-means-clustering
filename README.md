@@ -359,7 +359,9 @@ Replace `YOUR_API_URL` with your API endpoint and paste the following code in [V
 }
 ```
 
-Extra: show centroids also
+6. Extra: show centroids too!
+
+![Asteroids classification with centroids graph in Vega](images/asteroids_classification_centroids.png)
 
 ```json
 {
