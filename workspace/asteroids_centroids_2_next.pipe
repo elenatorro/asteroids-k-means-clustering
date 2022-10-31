@@ -1,23 +1,23 @@
 NODE next
-
 SQL >
-  with (select (step,j) from asteroids_centroids order by step desc limit 1) as prev
-  select toUInt8(prev.1) as step, toInt32(prev.2+1) as j, y as C
-  from (
-          select y,
-          sum(d) over () as total,
-          sum(d) over (rows between unbounded preceding and current row) as cum
-          from (
-            select argMin(Y, sqrt(plus(pow(minus(Y.1, C.1), 2), pow(minus(Y.2, C.2), 2))) as dx2) as y, min(dx2) as d
-            from asteroids_data
-            cross join (select * from asteroids_centroids order by step desc limit 1 by j) as asteroids_centroids
-            where Y not in (select C from asteroids_centroids)
-            group by Y
-          )
-      )
-  where total * (select rand32()/4294967295) < cum
-  order by cum
-  limit 1
+
+    with (select (step,j) from asteroids_centroids order by step desc limit 1) as prev
+    select toUInt8(prev.1) as step, toInt32(prev.2+1) as j, y as C
+    from (
+            select y,
+            sum(d) over () as total,
+            sum(d) over (rows between unbounded preceding and current row) as cum
+            from (
+              select argMin(Y, sqrt(plus(pow(minus(Y.1, C.1), 2), pow(minus(Y.2, C.2), 2))) as dx2) as y, min(dx2) as d
+              from asteroids_data
+              cross join (select * from asteroids_centroids order by step desc limit 1 by j) as asteroids_centroids
+              where Y not in (select C from asteroids_centroids)
+              group by Y
+            )
+        )
+    where total * (select rand32()/4294967295) < cum
+    order by cum
+    limit 1
 
 TYPE materialized
 DATASOURCE asteroids_centroids
